@@ -256,7 +256,14 @@ parse_region (Lisp_Object start, Lisp_Object end, Lisp_Object base_url,
       else
 	error_message = make_string (err->message, msglen);
 
-      xsignal2 (Qxml_error, error_message, map_error (err->code));
+      xsignal3 (Qxml_error, error_message, map_error (err->code),
+		list5 (make_number (err->line),
+		       err->str1 ? build_string (err->str1) : Qnil,
+		       err->str2 ? build_string (err->str2) : Qnil,
+		       err->str3 ? build_string (err->str3) : Qnil,
+		       list2 (make_number (err->int1),
+			      make_number (err->int2))
+		       ));
     }
 
   return result;
