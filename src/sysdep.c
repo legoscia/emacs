@@ -3540,7 +3540,6 @@ system_process_attributes (Lisp_Object pid)
   struct kinfo_proc proc;
   size_t proclen = sizeof proc;
 
-  struct gcpro gcpro1, gcpro2;
   Lisp_Object attrs = Qnil;
   Lisp_Object decoded_comm;
 
@@ -3550,8 +3549,6 @@ system_process_attributes (Lisp_Object pid)
 
   if (sysctl (mib, 4, &proc, &proclen, NULL, 0) != 0)
     return attrs;
-
-  GCPRO2 (attrs, decoded_comm);
 
   uid = proc.kp_eproc.e_ucred.cr_uid;
   attrs = Fcons (Fcons (Qeuid, make_fixnum_or_float (uid)), attrs);
@@ -3638,7 +3635,6 @@ system_process_attributes (Lisp_Object pid)
   t = timespec_sub (now, timeval_to_timespec (starttime));
   attrs = Fcons (Fcons (Qetime, make_lisp_time (t)), attrs);
 
-  UNGCPRO;
   return attrs;
 }
 
